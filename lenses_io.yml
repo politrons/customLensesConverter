@@ -1,0 +1,42 @@
+version: "3.2"
+volumes:
+  configFolder:
+services:
+  fastdata:
+    image: lensesio/fast-data-dev
+    container_name: fastdata
+    ports:
+      - 3030:3030
+      - 9092:9092
+      - 8081:8081
+    environment:
+      - SAMPLEDATA=0
+      - REST_PORT=0
+      - FORWARDLOGS=0
+      - RUNTESTS=0
+      - DISABLE_JMX=1
+      - CONNECTORS=${CONNECTOR}
+      - WEB_PORT=0
+      - DISABLE=hive-1.1
+  ftp_server:
+    image: stilliard/pure-ftpd
+    container_name: ftp_server
+    hostname: ftp_server
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      PUBLICHOST: "ftp_server"
+      FTP_USER_NAME: ftp
+      FTP_USER_PASS: ftp
+      FTP_USER_HOME: /home/ftpusers/ftp
+    depends_on:
+      - fastdata
+  ftps_client:
+    image: jlesage/filezilla:v1.28.0@sha256:d9286b92bc1cc98d0802e621fc2a4b806dd4512d8eca18970d7ba486aea8e750
+    ports:
+      - "5800:5800"
+    links:
+      - ftp_server
+    depends_on:
+      - fastdata
