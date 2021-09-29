@@ -1,15 +1,19 @@
-version: '2'
+version: '3.5'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
+    networks:
+      - my-proxy-net
 
   kafka:
     image: confluentinc/cp-kafka:latest
+    container_name: kafka
     user: root
     depends_on:
       - zookeeper
@@ -31,3 +35,9 @@ services:
 
     volumes:
       - /Users/pablogarcia/Development/CustomLenses:/ftp_connector
+    networks:
+      - my-proxy-net
+
+networks:
+  my-proxy-net:
+      name: custom_network

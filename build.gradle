@@ -1,5 +1,3 @@
-
-
 plugins {
     id "com.github.johnrengelman.shadow" version "7.0.0"
 }
@@ -33,29 +31,30 @@ allprojects {
         maven { url "https://repo.typesafe.com/typesafe/releases/" }
         maven { url "https://repository.cloudera.com/artifactory/cloudera-repos/" }
         maven { url "https://conjars.org/repo" }
-        maven { url "https://jitpack.io"}
+        maven { url "https://jitpack.io" }
     }
 
     shadowJar {
 
         manifest {
-            attributes( "StreamReactor-Version": project.version,
-                    "KCQL-Version" : "${kcqlVersion}",
+            attributes("StreamReactor-Version": project.version,
+                    "KCQL-Version": "${kcqlVersion}",
                     "Kafka-Version": "${kafkaVersion}",
-                    "Created-By" : "Lenses",
-                    "Created-At" : new Date().format("YYYYMMDDHHmm"),
+                    "Created-By": "Lenses",
+                    "Created-At": new Date().format("YYYYMMDDHHmm"),
                     "Git-Repo": "${gitRepo}",
                     "Git-Commit-Hash": "${gitCommitHash}",
                     "Git-Tag": "${gitTag}",
-                    "StreamReactor-Docs" : "https://docs.lenses.io/connectors/"
+                    "StreamReactor-Docs": "https://docs.lenses.io/connectors/"
             )
         }
     }
 
     dependencies {
         implementation 'io.confluent:kafka-connect-avro-converter:5.0.0'
-        implementation 'com.datamountaineer:kafka-connect-ftp:1.2.0'
-        implementation "com.jcraft:jsch:0.1.55"
+        implementation('org.apache.curator:curator-x-async:4.0.1')
+        implementation 'org.apache.curator:curator-recipes:4.1.0'
+        implementation('com.datamountaineer:kafka-connect-ftp:1.2.0')
     }
 
 }
